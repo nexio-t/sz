@@ -58,3 +58,16 @@ class NewsPost(SiteModel):
         if text_value:
             results = results.filter(Q(body__icontains=text_value) | Q(title__icontains=text_value))
         return set(results.all())
+
+
+class WhatWeAreReading(models.Model):
+    title = models.CharField(max_length=300)
+    source = models.CharField(max_length=300)
+    link = models.URLField(null=True)    
+    published_date = models.DateField(default=timezone.now)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name_plural = 'What We Are Reading Links'
