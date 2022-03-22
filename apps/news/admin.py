@@ -8,9 +8,7 @@ from news.models import NewsPost, WhatWeAreReading
 
 class WhatWeAreReadingInline(admin.StackedInline):
     model = NewsPost.reading_links.through
-
-# class AuthorAdmin(admin.ModelAdmin):
-#     inlines = [ WhatWeAreReadingInline, ]
+    max_num = 3
 
 class NewsPostForm(forms.ModelForm):
     model = NewsPost
@@ -23,9 +21,9 @@ class NewsPostForm(forms.ModelForm):
         'topics',
         'active',
     ]
+    class Meta:
+        widgets = {'reading_links': forms.HiddenInput()}
 
-# https://stackoverflow.com/questions/30472741/inlinemodeladmin-not-showing-up-on-admin-page
-# https://stackoverflow.com/questions/40153093/django-admin-tabular-inline-add-more-not-showing
 class NewsPostAdmin(SummernoteModelAdmin):
     inlines = [WhatWeAreReadingInline,]
     form = NewsPostForm
@@ -36,23 +34,4 @@ class NewsPostAdmin(SummernoteModelAdmin):
     
 
 admin.site.register(NewsPost, NewsPostAdmin)
-
-
 admin.site.register(WhatWeAreReading)
-
-
-# class WhatWeAreReadingPost(forms.ModelForm):
-#     model = WhatWeAreReading
-#     fields = [
-#         'title',
-#         'source',
-#         'link',
-#         'published_date',
-#     ]
-
-# class WhatWeAreReadingAdmin(SummernoteModelAdmin):
-#     form = WhatWeAreReadingPost
-#     list_display = ['title']
-#     list_editable = ['title', 'source', 'link', 'published_date',]
-
-# admin.site.register(WhatWeAreReadingPost, WhatWeAreReadingAdmin)

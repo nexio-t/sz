@@ -10,8 +10,6 @@ from taxonomy.models import Topic
 
 from lib.sitestuff import SiteModel
 
-
-# class WhatWeAreReading(models.Model):
 class WhatWeAreReading(SiteModel):
     title = models.CharField(max_length=300)
     source = models.CharField(max_length=300)
@@ -27,10 +25,6 @@ class WhatWeAreReading(SiteModel):
         verbose_name_plural = 'What We Are Reading Links'
         unique_together = ('link', 'site')
 
-# class WhatWeAreReadingInline(admin.TabularInline):
-#     model = WhatWeAreReading
-#     fields = ['title']
-
 class NewsPost(SiteModel):
     title = models.CharField(max_length=300)
     body = models.TextField(max_length=6000)
@@ -40,8 +34,6 @@ class NewsPost(SiteModel):
     active = models.BooleanField(default=True)
     topics = models.ManyToManyField(Topic)
     reading_links = models.ManyToManyField(WhatWeAreReading)
-
-    # inlines = [WhatWeAreReadingInline,] 
 
     def __str__(self):
         return '<{}> {}'.format(self.site.domain, self.title)
@@ -82,5 +74,7 @@ class NewsPost(SiteModel):
         if text_value:
             results = results.filter(Q(body__icontains=text_value) | Q(title__icontains=text_value))
         return set(results.all())
+    
+   
 
 
