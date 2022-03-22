@@ -74,7 +74,3 @@ class NewsPost(SiteModel):
         if text_value:
             results = results.filter(Q(body__icontains=text_value) | Q(title__icontains=text_value))
         return set(results.all())
-    
-   
-
-
