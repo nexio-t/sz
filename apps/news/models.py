@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 
+from django.contrib.sites.models import Site
 from django.db import models
 from django.db.models import Q
 from django.urls import reverse
@@ -9,6 +10,20 @@ from taxonomy.models import Topic
 
 from lib.sitestuff import SiteModel
 
+class WhatWeAreReading(SiteModel):
+    title = models.CharField(max_length=300)
+    source = models.CharField(max_length=300)
+    link = models.URLField(null=True)    
+    publish_date = models.DateField(default=timezone.now)
+    site = models.ForeignKey(Site, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = 'What We Are Reading Link'
+        verbose_name_plural = 'What We Are Reading Links'
+        unique_together = ('link', 'site')
 
 class NewsPost(SiteModel):
     title = models.CharField(max_length=300)
@@ -18,6 +33,7 @@ class NewsPost(SiteModel):
     publish_date = models.DateField(default=timezone.now)
     active = models.BooleanField(default=True)
     topics = models.ManyToManyField(Topic)
+    reading_links = models.ManyToManyField(WhatWeAreReading)
 
     def __str__(self):
         return '<{}> {}'.format(self.site.domain, self.title)
